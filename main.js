@@ -4,11 +4,13 @@ const itemList = document.querySelector("#itemList");
 const messageDiv = document.querySelector("#message");
 const clearButton = document.querySelector("#clearBtn");
 const filters = document.querySelectorAll(".nav-item");
+const buttons = document.querySelector("#buttons")
 
 // create empty item list
 let todoItems = [];
 
 var page = 1;
+var rows = 5;
 
 function getPage(value){
   let page = value;
@@ -16,8 +18,6 @@ function getPage(value){
   getList(todoItems,page);
   
 }
-
-
 
 const showAlert = function (message, msgClass) {
   console.log("msg");
@@ -117,13 +117,7 @@ const handleItem = function (itemData) {
 };
 
 
-
-
 const pagination = function(querySet,page,rows){
-  // console.log("In pagination >>>> ");
-  // console.log(querySet);
-  // console.log(page);
-  // console.log(rows);
 
   //console.log("queryset is",querySet);
   var trimStart = (page-1)*rows;
@@ -134,42 +128,14 @@ const pagination = function(querySet,page,rows){
   var trimmedData = querySet.slice(trimStart,trimEnd)
   //console.log("trimdata is",trimmedData);
   var pages = Math.ceil(querySet.length/rows);
-  //console.log("pages is",pages);
-
-
-
-  // return{
-  //     'querySet':trimmedData,
-  //     'pages':pages
-  // }
-
   return trimmedData;
-
-
-
 }
-
-
-
-
-var state ={
-  page:2,
-  rows:5
-}
-
-
-// function getPage(value){
-//   console.log("in get page");
-//   state.page= value;
-//   console.log("val is",state.page)
-  
-// }
 
 
 // get list items
 const getList = function (todoItems,page) {
   console.log("page is",page)
-  let data = pagination(todoItems,page,state.rows)
+  let data = pagination(todoItems,page,rows)
   console.log("data is ",data);
 
   itemList.innerHTML = "";
@@ -199,6 +165,7 @@ const getList = function (todoItems,page) {
       </li>`
     );
   }
+
 };
 
 // get localstorage from the page
@@ -212,6 +179,8 @@ const getLocalStorage = function () {
   }
   
   getList(todoItems,page);
+
+  return todoItems;
 };
 // set list in local storage
 const setLocalStorage = function (todoItems) {
@@ -267,8 +236,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-
-
   // load items
   getLocalStorage();
 });
+
+
+//Build buttons
+function pageButtons(querySet,rows){
+  let pdata = getLocalStorage();
+  let pages = Math.ceil(pdata.length/rows);
+  console.log("total pages are",pages);
+  for (i=1;i<=pages;i++){
+    console.log("i is",i)
+    buttons.insertAdjacentHTML(
+      "beforeend",
+       `
+      <input type="button"  value="${i}" onclick="getPage(value)">
+      `
+    )
+  }
+}
+
+pageButtons(todoItems,rows);

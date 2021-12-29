@@ -54,12 +54,14 @@ const updateItem = function (itemIndex, newValue) {
   newItem.name = newValue;
   todoItems.splice(itemIndex, 1, newItem);
   setLocalStorage(todoItems);
+  window.location.reload();
 };
 
 // remove/delete item
 const removeItem = function (item) {
   const removeIndex = todoItems.indexOf(item);
   todoItems.splice(removeIndex, 1);
+  window.location.reload();
 };
 
 //bi-check-circle-fill  // bi-check-circle
@@ -111,6 +113,7 @@ const handleItem = function (itemData) {
             showAlert("Item has been deleted.", "alert-success");
             return todoItems.filter((item) => item != itemData);
           }
+          
         });
     }
   });
@@ -219,6 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     console.log(todoItems);
     itemInput.value = "";
+    window.location.reload();
+    
   });
 
   // filters
